@@ -22,29 +22,37 @@
   https://www.google.com/search?q=allow+access+from+files  
  -->
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Casa El Palto</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Casa El Palto</title>
 
-<!--  Copy the following scripts in your page header -->
-<script type="text/javascript" src="lib/big.min.js"></script>
-<script type="text/javascript" src="lib/gl-matrix-min.js"></script>
-<script type="text/javascript" src="lib/jszip.min.js"></script>
-<script type="text/javascript" src="lib/core.min.js"></script>
-<script type="text/javascript" src="lib/geom.min.js"></script>
-<script type="text/javascript" src="lib/stroke.min.js"></script>
-<script type="text/javascript" src="lib/batik-svgpathparser.min.js"></script>
-<script type="text/javascript" src="lib/jsXmlSaxParser.min.js"></script>
-<script type="text/javascript" src="lib/triangulator.min.js"></script>
-<script type="text/javascript" src="lib/viewmodel.min.js"></script>
-<script type="text/javascript" src="lib/viewhome.min.js"></script>
+  <!--  Copy the following scripts in your page header -->
+  <script type="text/javascript" src="lib/big.min.js"></script>
+  <script type="text/javascript" src="lib/gl-matrix-min.js"></script>
+  <script type="text/javascript" src="lib/jszip.min.js"></script>
+  <script type="text/javascript" src="lib/core.min.js"></script>
+  <script type="text/javascript" src="lib/geom.min.js"></script>
+  <script type="text/javascript" src="lib/stroke.min.js"></script>
+  <script type="text/javascript" src="lib/batik-svgpathparser.min.js"></script>
+  <script type="text/javascript" src="lib/jsXmlSaxParser.min.js"></script>
+  <script type="text/javascript" src="lib/triangulator.min.js"></script>
+  <script type="text/javascript" src="lib/viewmodel.min.js"></script>
+  <script type="text/javascript" src="lib/viewhome.min.js"></script>
 
-<style type="text/css">
-/* The class of components handled by the viewer */
-/*.viewerComponent  {
+  <style type="text/css">
+    html,
+    body {
+      margin: 0px;
+      padding: 0px;
+      overflow: hidden;
+    }
+
+    /* The class of components handled by the viewer */
+    /*.viewerComponent  {
 }*/
-/* To display the viewer in full screen, uncomment the 3 following styles */
-/*
+    /* To display the viewer in full screen, uncomment the 3 following styles */
+    /*
 body {
   overflow-x: hidden;
   overflow-y: hidden;
@@ -60,34 +68,36 @@ body {
   left: 5px;
 }
 */
-</style>
+  </style>
 </head>
 
 <body>
-<div>
-  <!-- Copy the following canvas and components in your page, changing their size / texts and other values if needed  -->
-  <canvas id="viewerCanvas" class="viewerComponent"
-          style="width:100%; height:100%; background-color: #CCCCCC; outline:none" tabIndex="1"></canvas>
-  <div id="viewerProgressDiv" style="width: 400px; position: relative; top: -350px; left: 200px; background-color: rgba(128, 128, 128, 0.7); padding: 20px; border-radius: 25px">
-    <progress id="viewerProgress"  class="viewerComponent" value="0" max="200" style="width: 400px"></progress>
-    <label id="viewerProgressLabel" class="viewerComponent" style="margin-top: 2px; display: block; margin-left: 10px"></label>
+  <div>
+    <!-- Copy the following canvas and components in your page, changing their size / texts and other values if needed  -->
+    <canvas id="viewerCanvas" class="viewerComponent"
+      style="width:100%; height:100%; background-color: #CCCCCC; outline:none; z-index: 0;" tabIndex="1"></canvas>
+    <div id="viewerProgressDiv"
+      style="width: 400px; position: relative; top: -350px; left: 200px; background-color: rgba(128, 128, 128, 0.7); padding: 20px; border-radius: 25px">
+      <progress id="viewerProgress" class="viewerComponent" value="0" max="200" style="width: 400px"></progress>
+      <label id="viewerProgressLabel" class="viewerComponent"
+        style="margin-top: 2px; display: block; margin-left: 10px"></label>
+    </div>
   </div>
-</div>
 
-<!-- Copy the following script to view your home in the previous canvas -->
-<script type="text/javascript">
-  var homeUrl = "cumpeo3.zip";
-  var onerror = function(err) {
+  <!-- Copy the following script to view your home in the previous canvas -->
+  <script type="text/javascript">
+    var homeUrl = "cumpeo3.zip";
+    var onerror = function (err) {
       if (err == "No WebGL") {
         alert("Sorry, your browser doesn't support WebGL.");
       } else {
         console.log(err.stack);
-        alert("Error: " + (err.message  ? err.constructor.name + " " +  err.message  : err)
-              + (window.location.href.indexOf("file://") === 0 ? "\nCheck your browser is allowed to access local files." : ""));
+        alert("Error: " + (err.message ? err.constructor.name + " " + err.message : err)
+          + (window.location.href.indexOf("file://") === 0 ? "\nCheck your browser is allowed to access local files." : ""));
       }
     };
-  var onprogression = function(part, info, percentage) {
-      var progress = document.getElementById("viewerProgress"); 
+    var onprogression = function (part, info, percentage) {
+      var progress = document.getElementById("viewerProgress");
       if (part === HomeRecorder.READING_HOME) {
         // Home loading is finished 
         progress.value = percentage * 100;
@@ -99,33 +109,35 @@ body {
           document.getElementById("viewerProgressDiv").style.visibility = "hidden";
         }
       }
-    
-      document.getElementById("viewerProgressLabel").innerHTML = 
-          (percentage ? Math.floor(percentage * 100) + "% " : "") + part + " " + info;
+
+      document.getElementById("viewerProgressLabel").innerHTML =
+        (percentage ? Math.floor(percentage * 100) + "% " : "") + part + " " + info;
     };
-   
-  // Display home in canvas 3D
-  // Mouse and keyboard navigation explained at 
-  // http://sweethome3d.cvs.sf.net/viewvc/sweethome3d/SweetHome3D/src/com/eteks/sweethome3d/viewcontroller/resources/help/en/editing3DView.html
-  // You may also switch between aerial view and virtual visit with the space bar
-  // For browser compatibility, see http://caniuse.com/webgl
-  viewHome("viewerCanvas",    // Id of the canvas
-           homeUrl,           // URL or relative URL of the home to display 
-           onerror,           // Callback called in case of error
-           onprogression,     // Callback called while loading 
-          {roundsPerMinute: 0,                    // Rotation speed of the animation launched once home is loaded in rounds per minute, no animation if missing or equal to 0 
-           navigationPanel: "none",               // Displayed navigation arrows, "none" or "default" for default one or an HTML string containing elements with data-simulated-key 
-                                                  // attribute set "UP", "DOWN", "LEFT", "RIGHT"... to replace the default navigation panel, "none" if missing 
-           // aerialViewButtonId: "aerialView",      // Id of the aerial view radio button, radio buttons hidden if missing  
-           // virtualVisitButtonId: "virtualVisit",  // Id of the aerial view radio button, radio buttons hidden if missing  
-           // levelsAndCamerasListId: "levelsAndCameras",          // Id of the levels and cameras select component, hidden if missing
+
+    // Display home in canvas 3D
+    // Mouse and keyboard navigation explained at 
+    // http://sweethome3d.cvs.sf.net/viewvc/sweethome3d/SweetHome3D/src/com/eteks/sweethome3d/viewcontroller/resources/help/en/editing3DView.html
+    // You may also switch between aerial view and virtual visit with the space bar
+    // For browser compatibility, see http://caniuse.com/webgl
+    viewHome("viewerCanvas",    // Id of the canvas
+      homeUrl,           // URL or relative URL of the home to display 
+      onerror,           // Callback called in case of error
+      onprogression,     // Callback called while loading 
+      {
+        roundsPerMinute: 0,                    // Rotation speed of the animation launched once home is loaded in rounds per minute, no animation if missing or equal to 0 
+        navigationPanel: "none",               // Displayed navigation arrows, "none" or "default" for default one or an HTML string containing elements with data-simulated-key 
+        // attribute set "UP", "DOWN", "LEFT", "RIGHT"... to replace the default navigation panel, "none" if missing 
+        // aerialViewButtonId: "aerialView",      // Id of the aerial view radio button, radio buttons hidden if missing  
+        // virtualVisitButtonId: "virtualVisit",  // Id of the aerial view radio button, radio buttons hidden if missing  
+        // levelsAndCamerasListId: "levelsAndCameras",          // Id of the levels and cameras select component, hidden if missing
         /* level: "Roof", */                                    // Uncomment to select the displayed level, default level if missing */
         /* selectableLevels: ["Ground floor", "Roof"], */       // Uncomment to choose the list of displayed levels, no select component if empty array */
         /* camera: "Exterior view", */                          // Uncomment to select a camera, default camera if missing */
         /* selectableCameras: ["Exterior view", "Kitchen"], */  // Uncomment to choose the list of displayed cameras, no camera if missing */
-           // activateCameraSwitchKey: true                        // Switch between top view / virtual visit with space bar if not false or missing */
-          });  
-</script>
+        // activateCameraSwitchKey: true                        // Switch between top view / virtual visit with space bar if not false or missing */
+      });  
+  </script>
 
 </body>
+
 </html>
