@@ -36,6 +36,11 @@
       height: 100%;
       max-width: 800px;
       max-height: 600px;
+      position: relative;
+    }
+
+    #viewerContainer>div {
+      visibility: visible;
     }
 
     #viewerCanvas {
@@ -49,7 +54,7 @@
 
 <body>
   <div id="viewerContainer">
-    <canvas id="viewerCanvas" />
+    <canvas id="viewerCanvas" class="viewerComponent" />
   </div>
 
   <script type="text/javascript">
